@@ -27,3 +27,7 @@ class Client
 
 }
 $client = Client::getInstance();
+$client->send([
+    'event' => 'email',
+    'data' => 'test'
+    ]);

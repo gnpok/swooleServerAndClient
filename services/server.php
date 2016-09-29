@@ -32,34 +32,28 @@ class Server
     }
 
     public function onReceive( swoole_server $serv, $fd, $from_id, $data ) {
-        echo "Get Message From Client {$fd}:{$data}\n";
+        // echo "Get Message From Client {$fd}:{$data}\n";
         // send a task to task worker.
-        $param = array(
-        	'fd' => $fd
-        );
-        $serv->task( json_encode( $param ) );
-        echo "Continue Handle Worker\n";
-    }
-
-    public function onClose( $serv, $fd, $from_id ) {
-        echo "Client {$fd} close connection\n";
+        $serv->task($data);
+        // echo "Continue Handle Worker\n";
     }
 
     public function onTask($serv,$task_id,$from_id, $data) {
-    	echo "This Task {$task_id} from Worker {$from_id}\n";
-    	echo "Data: {$data}\n";
-    	for($i = 0 ; $i < 3 ; $i ++ ) {
-    		sleep(1);
-    		echo "Taks {$task_id} Handle {$i} times...\n";
-    	}
-        $fd = json_decode( $data , true )['fd'];
+    	// echo "This Task {$task_id} from Worker {$from_id}\n";
+    	// echo "Data: {$data}\n";
+        require_once __DIR__.'/../vendor/autoload.php';
+        Handle::doHandle($data);
     	// $serv->send( $fd , "Data in Task {$task_id}");
-    	return "Task {$task_id}'s result";
+    	// return "Task {$task_id}'s result";
     }
 
     public function onFinish($serv,$task_id, $data) {
     	echo "Task {$task_id} finish\n";
     	echo "Result: {$data}\n";
+    }
+
+    public function onClose( $serv, $fd, $from_id ) {
+        echo "Client {$fd} close connection\n";
     }
 }
 
