@@ -7,6 +7,7 @@ class Client
 
     public function __construct()
     {
+        //用于php-fpm或apache,这边设置为同步客户端
         $client = new swoole_client(SWOOLE_SOCK_TCP);
         $client->connect("127.0.0.1", 9501, 1);
         if (!$client->isConnected()) {
