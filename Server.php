@@ -1,21 +1,25 @@
 <?php
 
+define('BASEPATH', dirname(__FILE__));
+require_once BASEPATH.'/TaskFactory.php';
+
 class Server
 {
     private $serv;
 
     public function __construct()
     {
-        $this->serv = new swoole_server("0.0.0.0", 9501);
+        $allConfig = require_once BASEPATH.'/Config.php';
+        $config = $allConfig['swoole']['server'];
+
+        $this->serv = new swoole_server($config['host'], $config['port']);
         $this->serv->set(array(
-            'worker_num' => 8,
-            'daemonize' => false,
-            'max_request' => 10000,
-            'dispatch_mode' => 2,
-            'debug_mode' => 1,
-            'task_worker_num' => 8
+            'daemonize' => $config['daemonize'],
+            'dispatch_mode' => $config['dispatch_mode'],
+            'task_worker_num' => $config['task_worker_num'],
+            'task_ipc_mode' => $config['task_ipc_mode'],
+            'log_file' => $config['log_file']
         ));
-        $this->serv->on('Start', array($this, 'onStart'));
         $this->serv->on('Connect', array($this, 'onConnect'));
         $this->serv->on('Receive', array($this, 'onReceive'));
         $this->serv->on('Close', array($this, 'onClose'));
@@ -25,10 +29,6 @@ class Server
         $this->serv->start();
     }
 
-    public function onStart($serv)
-    {
-        echo "Start\n";
-    }
 
     public function onConnect($serv, $fd, $from_id)
     {
@@ -37,20 +37,23 @@ class Server
 
     public function onReceive(swoole_server $serv, $fd, $from_id, $data)
     {
-        // echo "Get Message From Client {$fd}:{$data}\n";
+        echo "Get Message From Client {$fd}:{$data}\n";
         // send a task to task worker.
-        $serv->task($data);
-        // echo "Continue Handle Worker\n";
+        $data = json_decode($data,true);
+        if(is_array($data) && isset($data['event'])){
+            $serv->task($data);
+            echo "Continue Handle Worker\n";
+        }
+       
     }
 
+    /**
+     *异步任务处理中心
+     */
     public function onTask($serv, $task_id, $from_id, $data)
     {
-        // echo "This Task {$task_id} from Worker {$from_id}\n";
-        // echo "Data: {$data}\n";
-        require_once __DIR__ . '/../vendor/autoload.php';
-        Handle::doHandle($data);
-        // $serv->send( $fd , "Data in Task {$task_id}");
-        // return "Task {$task_id}'s result";
+        echo "This Task {$task_id} from Worker {$from_id}\n";
+        TaskFactory::createTask($data);
     }
 
     public function onFinish($serv, $task_id, $data)

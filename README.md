@@ -1,13 +1,8 @@
-# swoolePractise
-swoole的一些实际应用 异步邮件，短信发送等
+### 将sup获取到的卡号卡密提交到回收平台
 
-> 如何使用
-```
-1.git clone https://github.com/gnpok/swoolePractise.git
-2.在代码根目录下执行:
-    composer install
-    composer dump-autoload
-3.开启服务器
-    php services/server.php
-4.参考test下面的sendMail.php
-```
+>基本使用 
+
+1.php Server.php运行swoole服务端 
+
+2.通过Client.php连接到服务端，并向服务端发送消息，进入异步任务
+

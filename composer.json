@@ -1,10 +1,5 @@
 {
   "require": {
-  	"phpmailer/phpmailer": "^5.2"
-  },
-  "autoload": {
-    "classmap": [
-      "app"
-    ]
+    "phpmailer/phpmailer": "^5.2"
   }
 }
