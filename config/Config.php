@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASE_PATH') OR exit('No direct script access allowed');
 
 $config = array(
     'swoole' => array(
@@ -11,7 +11,7 @@ $config = array(
             'dispatch_mode' => 3,
             'task_worker_num' => 8,
             'task_ipc_mode' => 3,
-            'log_file' => dirname(__FILE__) . '/swoole.log'
+            'log_file' => LOG_PATH. '/swoole.log'
         ),
         //swoole客户端配置
         'client' => array(

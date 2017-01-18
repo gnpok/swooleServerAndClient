@@ -1,24 +1,29 @@
 <?php
 
-define('BASEPATH', dirname(__FILE__));
-require_once BASEPATH.'/TaskFactory.php';
+define('BASE_PATH', dirname(__FILE__).'/../');
+define('CONFIG_PATH', BASE_PATH.'config/');
+define('TASK_PATH', BASE_PATH.'task/');
+define('LOG_PATH', BASE_PATH.'logs/');
+require_once TASK_PATH.'/TaskFactory.php';
 
 class Server
 {
     private $serv;
+    private $debug = true;
 
     public function __construct()
     {
-        $allConfig = require_once BASEPATH.'/Config.php';
+        $allConfig = require_once CONFIG_PATH.'/Config.php';
         $config = $allConfig['swoole']['server'];
+        extract($config);
 
-        $this->serv = new swoole_server($config['host'], $config['port']);
+        $this->serv = new swoole_server($host, $port);
         $this->serv->set(array(
-            'daemonize' => $config['daemonize'],
-            'dispatch_mode' => $config['dispatch_mode'],
-            'task_worker_num' => $config['task_worker_num'],
-            'task_ipc_mode' => $config['task_ipc_mode'],
-            'log_file' => $config['log_file']
+            'daemonize' => $daemonize,
+            'dispatch_mode' => $dispatch_mode,
+            'task_worker_num' => $task_worker_num,
+            'task_ipc_mode' => $task_ipc_mode,
+            'log_file' => $log_file
         ));
         $this->serv->on('Connect', array($this, 'onConnect'));
         $this->serv->on('Receive', array($this, 'onReceive'));
@@ -29,7 +34,6 @@ class Server
         $this->serv->start();
     }
 
-
     public function onConnect($serv, $fd, $from_id)
     {
         echo "Client {$fd} connect\n";
@@ -38,6 +42,7 @@ class Server
     public function onReceive(swoole_server $serv, $fd, $from_id, $data)
     {
         echo "Get Message From Client {$fd}:{$data}\n";
+
         // send a task to task worker.
         $data = json_decode($data,true);
         if(is_array($data) && isset($data['event'])){
@@ -53,7 +58,7 @@ class Server
     public function onTask($serv, $task_id, $from_id, $data)
     {
         echo "This Task {$task_id} from Worker {$from_id}\n";
-        TaskFactory::createTask($data);
+        $taskResult = TaskFactory::dispatch($data);
     }
 
     public function onFinish($serv, $task_id, $data)

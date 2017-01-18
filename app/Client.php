@@ -42,4 +42,5 @@ $data = array(
     'time' => time(),
     'event' => 'sample'
 );
-$client->sendMsg($data);
+$res = $client->sendMsg($data);
+var_dump($res);
