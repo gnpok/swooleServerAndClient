@@ -4,7 +4,7 @@ define('BASE_PATH', dirname(__FILE__).'/../');
 define('CONFIG_PATH', BASE_PATH.'config/');
 define('TASK_PATH', BASE_PATH.'task/');
 define('LOG_PATH', BASE_PATH.'logs/');
-require_once TASK_PATH.'/TaskFactory.php';
+require_once dirname(__FILE__).'/../Autoload.php';
 
 class Server
 {
@@ -39,7 +39,7 @@ class Server
         echo "Client {$fd} connect\n";
     }
 
-    public function onReceive(swoole_server $serv, $fd, $from_id, $data)
+    public function onReceive(swoole_server $serv, $fd, $from_id, $data = '')
     {
         echo "Get Message From Client {$fd}:{$data}\n";
 
@@ -58,7 +58,7 @@ class Server
     public function onTask($serv, $task_id, $from_id, $data)
     {
         echo "This Task {$task_id} from Worker {$from_id}\n";
-        $taskResult = TaskFactory::dispatch($data);
+        $taskResult = task\TaskFactory::dispatch($data);
     }
 
     public function onFinish($serv, $task_id, $data)

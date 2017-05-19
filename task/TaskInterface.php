@@ -1,4 +1,5 @@
 <?php
+namespace task;
 
 interface TaskInterface
 {

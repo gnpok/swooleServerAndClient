@@ -1,5 +1,5 @@
 <?php
-defined('BASE_PATH') OR exit('No direct script access allowed');
+namespace task;
 /**
 * 异步任务分发中心
 */
@@ -18,9 +18,11 @@ class TaskFactory
 			$event = ucfirst($event);
 			$taskPath = TASK_PATH.$event.'.php';
 			if(is_file($taskPath)){
-				require_once $taskPath;
-				$event::doTask($data);
-			}
+			    $taskclass = 'task\\'.$event;
+				$taskclass::doTask($data);
+			}else{
+			    echo '异步处理类不存在';
+            }
 
 		}
 	}

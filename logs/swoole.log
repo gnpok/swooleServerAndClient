@@ -1,0 +1,26 @@
+[2017-05-19 05:13:27 *3580.0]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught TypeError: Argument 4 passed to Server::onReceive() must be of the type array, string given in /vagrant_data/swooleServerAndClient/app/Server.php:42
+Stack trace:
+#0 [internal function]: Server->onReceive(Object(swoole_server), 1, 0, '{"time":1495163...')
+#1 /vagrant_data/swooleServerAndClient/app/Server.php(34): swoole_server->start()
+#2 /vagrant_data/swooleServerAndClient/app/Server.php(76): Server->__construct()
+#3 {main}
+  thrown in /vagrant_data/s
+[2017-05-19 05:13:27 $3570.0]	WARNING	swManager_check_exit_status: worker#0 abnormal exit, status=255, signal=0
+[2017-05-19 05:15:01 ^3671.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught Error: Class 'Sample' not found in /vagrant_data/swooleServerAndClient/task/TaskFactory.php:22
+Stack trace:
+#0 /vagrant_data/swooleServerAndClient/app/Server.php(61): task\TaskFactory::dispatch(Array)
+#1 [internal function]: Server->onTask(Object(swoole_server), 0, 0, Array)
+#2 /vagrant_data/swooleServerAndClient/app/Server.php(34): swoole_server->start()
+#3 /vagrant_data/swooleServerAndClient/app/Server.php(76): Server->__construct()
+#4 {main}
+  thro
+[2017-05-19 05:15:01 $3666.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
+[2017-05-19 05:17:22 ^3699.4]	ERROR	zm_deactivate_swoole (ERROR 503): Fatal error: Uncaught Error: Class 'Sample' not found in /vagrant_data/swooleServerAndClient/task/TaskFactory.php:21
+Stack trace:
+#0 /vagrant_data/swooleServerAndClient/app/Server.php(61): task\TaskFactory::dispatch(Array)
+#1 [internal function]: Server->onTask(Object(swoole_server), 0, 0, Array)
+#2 /vagrant_data/swooleServerAndClient/app/Server.php(34): swoole_server->start()
+#3 /vagrant_data/swooleServerAndClient/app/Server.php(76): Server->__construct()
+#4 {main}
+  thro
+[2017-05-19 05:17:22 $3694.0]	WARNING	swManager_check_exit_status: worker#4 abnormal exit, status=255, signal=0
