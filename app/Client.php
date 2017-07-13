@@ -32,7 +32,7 @@ class Client
             return false;
         }
         //这边send只能send字符串
-        $this->client->send(json_encode($data));
+        return $this->client->send(json_encode($data));
     }
 }
 
@@ -43,4 +43,5 @@ $data = array(
     'event' => 'sample'
 );
 $res = $client->sendMsg($data);
-var_dump($res);
+var_dump($res);//发送成功返回int数据，立即返回，这边并没有堵塞
+echo "go on";

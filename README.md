@@ -7,11 +7,15 @@
 
 
 #### 基本使用 
+> 这里只是简单了使用异步任务，目的让大家可以通俗的理解swoole task使用
 
-1.php Server.php运行swoole服务端 
-
-2.通过Client.php连接到服务端，并向服务端发送消息，进入异步任务
 ```
+//1.开启服务端
+php app/Server.php
+
+//2.客户端链接服务端，并发送异步任务
+新打开另一个终端
+php app/Client.php
 task中通过$data['event'] 来判断处理哪个事件，如发送邮件，短信发送等
 ```
 

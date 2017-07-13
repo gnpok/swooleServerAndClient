@@ -15,16 +15,10 @@ class Server
     {
         $allConfig = require_once CONFIG_PATH.'/Config.php';
         $config = $allConfig['swoole']['server'];
-        extract($config);
 
-        $this->serv = new swoole_server($host, $port);
-        $this->serv->set(array(
-            'daemonize' => $daemonize,
-            'dispatch_mode' => $dispatch_mode,
-            'task_worker_num' => $task_worker_num,
-            'task_ipc_mode' => $task_ipc_mode,
-            'log_file' => $log_file
-        ));
+        $this->serv = new swoole_server($config['host'], $config['port']);
+        $this->serv->set($config);
+
         $this->serv->on('Connect', array($this, 'onConnect'));
         $this->serv->on('Receive', array($this, 'onReceive'));
         $this->serv->on('Close', array($this, 'onClose'));
